@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.small-toast {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    margin-top: 8px;
+    min-height: 20px !important; /* Further reduce height */
+    border-radius: 10px !important; /* Smaller rounded corners */
+    padding: 5px 10px !important; /* Reduce padding */
+    font-size: 0.7rem !important; /* Smaller text */
+    width: 200px !important; /* Adjust width */
+  }
+  
+  .small-toast-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem !important; /* Smaller text size */
+    line-height: 1rem; /* Reduce line height */
+  }
+  
+  
+  
+
+body{
+    background: #eceeef66;
+}
