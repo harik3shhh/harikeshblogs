@@ -1,49 +1,42 @@
+
 const express = require("express");
-const { requireSignIn, isAdmin } = require("../middlewares/auth-middleware");
-const { 
-    createBlogController, 
-    getBlogController, 
-    getSingleBlogController, 
-    // blogPhotoController, 
-    deleteBlogController, 
-    updateBlogController, 
-    // blogFilterController, 
-    searchBlogController, 
-    relatedBlogController, 
-    blogCategoryController 
-} = require("../controllers/blog-controller");
+const {requireSignIn, isAdmin} = require("../middlewares/auth-middleware")
+const {createBlogController, getProductController, getSingleProduct, productPhotoController, deleteProductController, updateProductController, productFilterController, productCountController, productListController, searchProductController, relatedProductController, productCategoryController} = require("../controllers/blog-controller");
 const formidable = require("express-formidable");
 
 const router = express.Router();
 
-// Route to create a blog (admin only)
-router.route("/create-blog").post(requireSignIn, isAdmin, formidable(), createBlogController);
+router.route("/create-blog", requireSignIn, isAdmin, formidable()).post(createBlogController);
 
-// Route to get all blogs
-router.route("/get-blog").get(getBlogController);
+router.route("/get-place").get(getProductController);
 
-// Route to get a single blog by slug
-router.route("/get-blog/:slug").get(getSingleBlogController);
+router.route("/get-place/:slug").get(getSingleProduct);
 
-// Route to get the blog photo
-// router.route("/blog-photo/:bid").get(blogPhotoController);
+router.route("/place-photo/:pid").get(productPhotoController);
 
-// Route to delete a blog by id (admin only)
-router.route("/delete-blog/:bid").delete(requireSignIn, isAdmin, deleteBlogController);
 
-// Route to update a blog by id (admin only)
-router.route("/update-blog/:bid").put(requireSignIn, isAdmin, formidable(), updateBlogController);
+//delete product
+router.delete("/delete-place/:pid", deleteProductController)
 
-// Route to filter blogs
-// router.route("/blog-filters").post(blogFilterController);
+//update
+router.route("/update-place/:pid", requireSignIn, isAdmin, formidable()).put(updateProductController);
 
-// Route to search blogs
-router.route("/search/:keyword").get(searchBlogController);
+// FILTER PRODUCT
+router.post("/place-filters", productFilterController);
 
-// Route to get related blogs
-router.route("/related-blog/:bid/:cid").get(relatedBlogController);
+// PRODUCT COUNT
+router.get("/place-count", productCountController);
 
-// Route to get blogs by category
-router.route("/blog-category/:slug").get(blogCategoryController);
+// product per page
+router.get("/place-list/:page", productListController);
+
+// search product 
+router.get("/search/:keyword", searchProductController);
+
+// similar products
+router.get("/related-place/:pid/:cid", relatedProductController);
+
+// CATEGORY WISE PRODUCT 
+router.get("/place-category/:slug", productCategoryController);
 
 module.exports = router;

@@ -1,259 +1,209 @@
-import React, { useState } from 'react';
-import { AiOutlinePicture, AiOutlineLink, AiOutlineFileText } from 'react-icons/ai';
-import { FiPlus } from 'react-icons/fi';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; // Import Quill stylesheet
 import Layout from '../../components/Layout';
 
 const PublishBlog = () => {
-    const [widgetPopup, setWidgetPopup] = useState(false);
-    const [widgetItems, setWidgetItems] = useState([]);
-    const [formData, setFormData] = useState({
-        image: '',
-        caption: '',
-        title: '',
-        description: '',
-        author: '',
-    });
+  const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
+  const [title, setTitle] = useState('');
+  const [caption, setCaption] = useState('');
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('');
+  const [categoryName, setCategoryName] = useState('');
+  const [photo, setPhoto] = useState('');
+  const [author, setAuthor] = useState('');
+  const [publishDate, setPublishDate] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    // Handle form input changes
-    const handleInputChange = (e, index = null) => {
-        const { name, value, files } = e.target;
+  const toolbarOptions = [
+    [{ 'header': [1, 2, false] }], // Add heading options
+    ['bold', 'italic', 'underline'],
+    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+    ['link', 'image'],
+    ['clean']
+  ];
 
-        if (name === 'image') {
-            setFormData({ ...formData, image: files[0] }); // Store the file for upload
-        } else if (index !== null) {
-            // If it's a widget, update widget data
-            const updatedWidgets = [...widgetItems];
+  const getAllCategory = async () => {
+    try {
+      const { data } = await axios.get('http://localhost:8000/api/v1/category/get-category');
+      if (data?.success) {
+        setCategories(data?.category);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error('Something went wrong in getting categories');
+    }
+  };
 
-            if (name === 'widgetImage') {
-                updatedWidgets[index].image = files[0]; // Store the widget image file
-            } else {
-                updatedWidgets[index].content = value;
-            }
+  useEffect(() => {
+    getAllCategory();
+  }, []);
 
-            setWidgetItems(updatedWidgets);
-        } else {
-            setFormData({ ...formData, [name]: value });
-        }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!category || !title || !caption || !description || !author || !publishDate) {
+      toast.error('Please fill all fields');
+      return;
+    }
 
-    // Toggle widget popup
-    const toggleWidgetPopup = () => {
-        setWidgetPopup(!widgetPopup);
-    };
+    try {
+      const blogData = new FormData();
+      blogData.append('category', category);
+      blogData.append('title', title);
+      blogData.append('caption', caption);
+      blogData.append('description', description);
+      blogData.append('photo', photo);
+      blogData.append('author', author);
+      blogData.append('publishDate', publishDate);
 
-    // Add widget item to the list
-    const addWidgetItem = (type) => {
-        const newItem = { type, content: '', image: '' };
-        setWidgetItems([...widgetItems, newItem]);
-        setWidgetPopup(false); // Close popup after selection
-    };
+      const { data } = await axios.post('http://localhost:8000/api/v1/blog/create-blog', blogData);
+      if (data?.success) {
+        toast.success('Blog Created Successfully');
+        navigate('/');
+      } else {
+        toast.error('Failed to Create Blog');
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error('Something went wrong while creating Blog');
+    }
+  };
 
-    // Handle form submission
-    const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevent default form submission
-
-        // Create FormData object to send all data including images
-        const data = new FormData();
-        data.append('image', formData.image);
-        data.append('caption', formData.caption);
-        data.append('title', formData.title);
-        data.append('description', formData.description);
-        data.append('author', formData.author);
-        
-        // Append widget items to FormData
-        widgetItems.forEach((widget, index) => {
-            if (widget.type === 'image' && widget.image) {
-                data.append(`widgetImage_${index}`, widget.image);
-            } else {
-                data.append(`widgetContent_${index}`, widget.content);
-                data.append(`widgetType_${index}`, widget.type);
-            }
-        });
-
-        try {
-            const response = await fetch('http://localhost:8000/api/v1/blog/create-blog', {
-                method: 'POST',
-                body: data,
-            });
-            const result = await response.json();
-            if (response.ok) {
-                // Handle successful blog creation (e.g., show a success message, redirect, etc.)
-                console.log('Blog created successfully:', result);
-            } else {
-                // Handle error case
-                console.error('Error creating blog:', result);
-            }
-        } catch (error) {
-            console.error('Fetch error:', error);
-        }
-    };
-
-    return (
-        <Layout>
-            <h1 className="text-3xl mt-6 font-bold text-center mb-8 text-gray-800 dark:text-white">
-                Create and Publish Your Blog
-            </h1>
-            <div className='flex justify-center items-center'>
-                <div className="md:w-full p-6 lg:p-12 grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div className="lg:pr-8">
-                        <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-900 shadow-xl rounded-xl p-6 space-y-6">
-                            <div>
-                                <label className="block text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                    Upload Image
-                                </label>
-                                <input
-                                    type="file"
-                                    name="image"
-                                    accept="image/*"
-                                    onChange={handleInputChange}
-                                    className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-700 p-3"
-                                />
-                            </div>
-                            
-                            <div>
-                                <label className="block text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                    Image Caption
-                                </label>
-                                <input
-                                    type="text"
-                                    name="caption"
-                                    value={formData.caption}
-                                    onChange={handleInputChange}
-                                    className="block w-full px-4 py-3 border rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                                    placeholder="Enter image caption"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                    Blog Title
-                                </label>
-                                <input
-                                    type="text"
-                                    name="title"
-                                    value={formData.title}
-                                    onChange={handleInputChange}
-                                    className="block w-full px-4 py-3 border rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                                    placeholder="Enter blog title"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                    Blog Description
-                                </label>
-                                <textarea
-                                    name="description"
-                                    value={formData.description}
-                                    onChange={handleInputChange}
-                                    className="block w-full px-4 py-3 border rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                                    placeholder="Enter blog description"
-                                    rows="4"
-                                ></textarea>
-                            </div>
-
-                            <div>
-                                <label className="block text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                    Author Name
-                                </label>
-                                <input
-                                    type="text"
-                                    name="author"
-                                    value={formData.author}
-                                    onChange={handleInputChange}
-                                    className="block w-full px-4 py-3 border rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                                    placeholder="Enter author name"
-                                />
-                            </div>
-
-                            <div className="space-y-6">
-                                {widgetItems.map((widget, index) => (
-                                    <div key={index} className="mb-6">
-                                        {widget.type === 'image' && (
-                                            <div>
-                                                <label className="block text-lg font-semibold text-gray-700 dark:text-gray-300">
-                                                    Widget Image Upload
-                                                </label>
-                                                <input
-                                                    type="file"
-                                                    accept="image/*"
-                                                    className="block w-full px-4 py-3 border rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                                                    onChange={(e) => handleInputChange(e, index)}
-                                                    name="widgetImage" // Add name to distinguish it
-                                                />
-                                            </div>
-                                        )}
-                                        {widget.type === 'description' && (
-                                            <div>
-                                                <label className="block text-lg font-semibold text-gray-700 dark:text-gray-300">
-                                                    Widget Description
-                                                </label>
-                                                <textarea
-                                                    className="block w-full px-4 py-3 border rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                                                    placeholder="Enter description"
-                                                    rows="2"
-                                                    onChange={(e) => handleInputChange(e, index)}
-                                                ></textarea>
-                                            </div>
-                                        )}
-                                        {widget.type === 'link' && (
-                                            <div>
-                                                <label className="block text-lg font-semibold text-gray-700 dark:text-gray-300">
-                                                    Widget Link
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    className="block w-full px-4 py-3 border rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                                                    placeholder="Enter link"
-                                                    onChange={(e) => handleInputChange(e, index)}
-                                                />
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-
-                            <button type="submit" className="block w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md">
-                                Publish
-                            </button>
-                        </form>
-
-                        <div
-                            className="fixed bottom-10 right-10 bg-blue-500 hover:bg-blue-700 text-white p-3 rounded-full cursor-pointer shadow-lg z-50"
-                            onClick={toggleWidgetPopup}
-                        >
-                            <FiPlus className="text-3xl" />
-                        </div>
-
-                        <AnimatePresence>
-                            {widgetPopup && (
-                                <motion.div
-                                    className="fixed bottom-32 right-12 flex flex-col items-center space-y-4"
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: 10 }}
-                                >
-                                    <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4">
-                                        <h2 className="text-lg font-semibold mb-2">Add Widget</h2>
-                                        <button className="block bg-gray-300 hover:bg-gray-400 text-black font-semibold p-2 rounded mb-2" onClick={() => addWidgetItem('image')}>
-                                            <AiOutlinePicture className="inline-block mr-2" /> Image
-                                        </button>
-                                        <button className="block bg-gray-300 hover:bg-gray-400 text-black font-semibold p-2 rounded mb-2" onClick={() => addWidgetItem('description')}>
-                                            <AiOutlineFileText className="inline-block mr-2" /> Description
-                                        </button>
-                                        <button className="block bg-gray-300 hover:bg-gray-400 text-black font-semibold p-2 rounded" onClick={() => addWidgetItem('link')}>
-                                            <AiOutlineLink className="inline-block mr-2" /> Link
-                                        </button>
-                                    </div>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
-                </div>
+  return (
+    <Layout>
+      <div className="flex flex-col lg:flex-row gap-8 p-6">
+        <div className="flex-1">
+          <h1 className="text-3xl font-bold mb-6">Write Blog</h1>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* CATEGORY DROPDOWN */}
+            <div className="relative w-full">
+              <button
+                type="button"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="w-full p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+              >
+                {categoryName || 'Select Category'}
+              </button>
+              <div
+                className={`absolute mt-2 w-full bg-white border border-gray-300 rounded shadow-lg overflow-hidden transition-all duration-300 ${dropdownOpen ? 'max-h-96' : 'max-h-0'}`}
+                style={{ transition: 'max-height 0.3s ease-in-out' }}
+              >
+                {categories?.map((c) => (
+                  <div
+                    key={c._id}
+                    onClick={() => {
+                      setCategory(c._id);
+                      setCategoryName(c.name);
+                      setDropdownOpen(false);
+                    }}
+                    className="p-3 hover:bg-blue-100 cursor-pointer"
+                  >
+                    {c.name}
+                  </div>
+                ))}
+              </div>
             </div>
-        </Layout>
-    );
+
+            {/* UPLOAD IMAGE */}
+            <div className="flex items-center space-x-4">
+              <label htmlFor="photo" className="font-semibold">Upload Image:</label>
+              <input
+                type="file"
+                id="photo"
+                accept="image/*"
+                onChange={(e) => setPhoto(e.target.files[0])}
+                className="border border-gray-300 p-2 rounded"
+              />
+            </div>
+
+            {/* TITLE */}
+            <input
+              type="text"
+              value={title}
+              placeholder="Blog Title"
+              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+              onChange={(e) => setTitle(e.target.value)}
+            />
+
+            {/* CAPTION */}
+            <input
+              type="text"
+              value={caption}
+              placeholder="Caption"
+              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+              onChange={(e) => setCaption(e.target.value)}
+            />
+
+            {/* DESCRIPTION */}
+            <div className="mb-6">
+              <label className="font-semibold mb-2 block">Description:</label>
+              <div className="rounded p-2 border border-gray-300 h-96">
+                <ReactQuill
+                  theme="snow"
+                  value={description}
+                  onChange={setDescription}
+                  placeholder="Write your blog content here..."
+                  modules={{
+                    toolbar: toolbarOptions,
+                  }}
+                  className="h-80" // Set fixed height for the editor
+                />
+              </div>
+            </div>
+
+            {/* AUTHOR */}
+            <input
+              type="text"
+              value={author}
+              placeholder="Author Name"
+              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+              onChange={(e) => setAuthor(e.target.value)}
+            />
+
+            {/* PUBLISH DATE */}
+            <input
+              type="date"
+              value={publishDate}
+              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+              onChange={(e) => setPublishDate(e.target.value)}
+            />
+
+            <button
+              type="submit"
+              className="w-full py-3 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition duration-200"
+            >
+              PUBLISH BLOG
+            </button>
+          </form>
+        </div>
+
+        {/* Preview Section */}
+        <div className="flex-1">
+          <h2 className="text-2xl font-semibold mb-4">Preview</h2>
+          <div className="border border-gray-300 p-4 rounded space-y-4">
+            <h3 className="text-xl font-bold">{title || 'Blog Title'}</h3>
+            <h5 className="text-lg">{caption || 'Caption goes here...'}</h5>
+            <p className="text-gray-600">
+              By <strong>{author || 'Author Name'}</strong> on{' '}
+              {publishDate ? new Date(publishDate).toDateString() : 'Publish Date'}
+            </p>
+            {photo && (
+              <img
+                src={URL.createObjectURL(photo)}
+                alt="Blog"
+                className="w-full h-auto mb-4 rounded"
+              />
+            )}
+            <div dangerouslySetInnerHTML={{ __html: description }} className="text-gray-700" />
+          </div>
+        </div>
+      </div>
+    </Layout>
+  );
 };
 
 export default PublishBlog;
