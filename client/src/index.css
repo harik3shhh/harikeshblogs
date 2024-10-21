@@ -8,6 +8,10 @@
     box-sizing: border-box;
 }
 
+body{
+  background: rgb(27, 25, 25);
+}
+
 .small-toast {
     display: flex;
     justify-content: center;
@@ -28,9 +32,24 @@
     line-height: 1rem; /* Reduce line height */
   }
   
-  
-  
 
-body{
-    background: #eceeef66;
+
+/* styles.css */
+p a {
+  color: blue;
+  text-decoration: underline;
+}
+
+
+/* Target only links within paragraphs in a specific blog container */
+.blog-content p a {
+  color: blue;
+  text-decoration: underline;
+}
+
+
+
+body.light-theme {
+  background-color: rgb(235, 238, 243);
+  color: black; /* Optional: Set text color for better readability */
 }

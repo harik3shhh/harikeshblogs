@@ -1,92 +1,134 @@
-import React from 'react'
-import Layout from '../components/Layout'
-import { Link } from 'react-router-dom'
-import tourindia from "../assets/tourindia.jpg"
+import React, { useEffect, useState } from 'react';
+import Layout from '../components/Layout';
+import { Link } from 'react-router-dom';
+import tourindia from "../assets/tourindia.jpg";
+import axios from "axios";
+import { FaPlus, FaSpinner, FaBookmark } from 'react-icons/fa'; // Import save icon
+import { IoAddSharp } from "react-icons/io5";
 
 const HomeBlogs = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+
+  const getBlog = async () => {
+    try {
+      const { data } = await axios.get(`http://localhost:8000/api/v1/blog/blog-list/${page}`);
+      setBlogs(data?.blogs);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getBlog();
+    getTotal();
+  }, []);
+
+  const getTotal = async () => {
+    try {
+      const { data } = await axios.get("http://localhost:8000/api/v1/blog/blog-count");
+      setTotal(data?.total);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (page === 1) return;
+    loadMore();
+  }, [page]);
+
+  const loadMore = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios(`http://localhost:8000/api/v1/blog/blog-list/${page}`);
+      setLoading(false);
+      setBlogs([...blogs, ...data?.blogs]);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  // Save blog function
+  const handleSaveBlog = async (blogId) => {
+    try {
+      // Assuming you have an authenticated user
+      const { data } = await axios.post(`${VITE_BASE_URL}/api/v1/blog/save-blog`, { blogId });
+      alert("Blog saved successfully!");
+    } catch (error) {
+      console.log(error);
+      alert("Error saving blog. Please try again.");
+    }
+  };
+
   return (
     <>
-        <Layout>
-        <div className="bg-gray-50  min-h-screen py-8 flex justify-center">
-          <div className="w-full  rounded-lg p-6">
+      <Layout title={"Home - Blogs travel and tech"}>
+        <div className="min-h-screen py-8 flex justify-center">
+          <div className="w-full rounded-lg p-6">
             <h1 className="text-4xl font-bold text-center text-gray-800 mb-6">Welcome to Our Blog</h1>
             <p className="text-center text-gray-600 mb-8">
               Stay updated with the latest news, tips, and insights from our blogs.
             </p>
 
-            {/* Dummy Blog Posts */}
+            {/* Blog Posts */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {/* Blog Post 1 */}
-              <Link to="/blog-details">
-                <div className="bg-white rounded-lg transition-shadow duration-300">
-                  <img
-                    className="rounded-t-lg h-48 w-full object-cover"
-                    src={tourindia}
-                    alt="Blog 1"
-                  />
-                  <div className="p-4">
-                    <h2 className="text-2xl font-semibold mb-2"> प्राकृतिक सुंदरता के रंग: भारत के सर्वश्रेष्ठ पर्वतीय स्थान </h2>
-                    <p className="text-gray-600 mb-4">
-                      Learn the essentials of creating a successful blog and sharing your thoughts with the world.
-                    </p>
-                    <a href="#blog1" className="text-blue-500 hover:underline">Read More</a>
-                  </div>
-                </div>
-              </Link>
 
-              {/* Blog Post 2 */}
-              <div className="bg-white rounded-lg  transition-shadow duration-300">
-                <img
-                  className="rounded-t-lg h-48 w-full object-cover"
-                  src="https://via.placeholder.com/350x150"
-                  alt="Blog 2"
-                />
-                <div className="p-4">
-                  <h2 className="text-2xl font-semibold mb-2">iPhone 15 सीरीज: नई तकनीक और शानदार फीचर्स</h2>
-                  <p className="text-gray-600 mb-4">{`
-                Apple ने हाल ही में iPhone 15 सीरीज लॉन्च की है, जिसमें नई तकनीक और फीचर्स का उपयोग किया गया है। इस सीरीज में बेहतर कैमरा, नई चिप, और डिस्प्ले क्वालिटी का उल्लेखनीय सुधार किया गया है। आइए जानें कि इस नए iPhone सीरीज में क्या खास है।`.substring(0, 100) + "..."}
-                  </p>
-                  <a href="#blog2" className="text-blue-500 hover:underline">Read More</a>
-                </div>
-              </div>
+              {/* Dynamically Rendered Blog Posts */}
+              {blogs.map((b) => (
+                <div key={b._id} className="relative">
+                  <Link to={`/blog/${b.slug}`}>
+                    <div className="bg-white rounded-lg transition-shadow lg:h-[440px] duration-300">
+                      <img
+                        className="rounded-t-lg h-48 w-full object-cover"
+                        src={`http://localhost:8000/api/v1/blog/blog-photo/${b._id}`}
+                        alt="Blog"
+                      />
+                      <div className="p-4">
+                        <h2 className="text-2xl font-semibold mb-2">{b.title.substring(0, 50) + "..."}</h2>
+                        {/* Render blog description as HTML */}
+                        <div
+                          className="text-gray-600 mb-4"
+                          dangerouslySetInnerHTML={{ __html: b.description.substring(0,60) + "..." }}
+                        />
+                      </div>
+                    </div>
+                  </Link>
 
-              {/* Blog Post 3 */}
-              <div className="bg-white rounded-lg  transition-shadow duration-300">
-                <img
-                  className="rounded-t-lg h-48 w-full object-cover"
-                  src="https://via.placeholder.com/350x150"
-                  alt="Blog 3"
-                />
-                <div className="p-4">
-                  <h2 className="text-2xl font-semibold mb-2">How to Monetize Your Blog</h2>
-                  <p className="text-gray-600 mb-4">
-                    Discover how you can turn your blog into a source of passive income with these monetization strategies.
-                  </p>
-                  <a href="#blog3" className="text-blue-500 hover:underline">Read More</a>
+                  {/* Save Icon */}
+                  <button
+                    onClick={() => handleSaveBlog(b._id)}
+                    className="absolute bottom-4 right-4 text-gray-500 hover:text-gray-900 transition-colors duration-200"
+                  >
+                    {/* <FaBookmark size={24} /> */}
+                  </button>
                 </div>
-              </div>
+              ))}
+            </div>
 
-              {/* Blog Post 4 */}
-              <div className="bg-white rounded-lg  transition-shadow duration-300">
-                <img
-                  className="rounded-t-lg h-48 w-full object-cover"
-                  src="https://via.placeholder.com/350x150"
-                  alt="Blog 4"
-                />
-                <div className="p-4">
-                  <h2 className="text-2xl font-semibold mb-2">The Future of Blogging: Trends to Watch</h2>
-                  <p className="text-gray-600 mb-4">
-                    Stay ahead of the curve with these future blogging trends and how they’ll impact content creation.
-                  </p>
-                  <a href="#blog4" className="text-blue-500 hover:underline">Read More</a>
-                </div>
-              </div>
+            {/* Load More Button */}
+            <div className="flex justify-center mt-8">
+              {blogs && blogs.length < total && (
+                <button
+                  className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-gray-500 hover:border-gray-700 text-gray-700 transition-colors duration-300 hover:text-black"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setPage(page + 1);
+                  }}
+                  disabled={loading}
+                >
+                  {loading ? <FaSpinner className="animate-spin" /> : <IoAddSharp size={35} />}
+                </button>
+              )}
             </div>
           </div>
         </div>
       </Layout>
     </>
-  )
-}
+  );
+};
 
-export default HomeBlogs
+export default HomeBlogs;

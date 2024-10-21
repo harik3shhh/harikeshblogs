@@ -1,42 +1,58 @@
-
 const express = require("express");
 const {requireSignIn, isAdmin} = require("../middlewares/auth-middleware")
-const {createBlogController, getProductController, getSingleProduct, productPhotoController, deleteProductController, updateProductController, productFilterController, productCountController, productListController, searchProductController, relatedProductController, productCategoryController} = require("../controllers/blog-controller");
+const {createBlogController, getBlogController, getSingleBlog, blogPhotoController, deleteBlogController, updateBlogController, blogFilterController, blogCountController, blogListController, searchBlogController, relatedBlogController, blogCategoryController, getSavedBlogsController, saveBlogController, createBannerController, createYoutubeVlogController, getYoutubeVlogController, youtubePhotoController} = require("../controllers/blog-controller");
 const formidable = require("express-formidable");
 
 const router = express.Router();
 
 router.route("/create-blog", requireSignIn, isAdmin, formidable()).post(createBlogController);
 
-router.route("/get-place").get(getProductController);
+router.route("/get-blog").get(getBlogController);
 
-router.route("/get-place/:slug").get(getSingleProduct);
+router.route("/get-blog/:slug").get(getSingleBlog);
 
-router.route("/place-photo/:pid").get(productPhotoController);
+router.route("/blog-photo/:pid").get(blogPhotoController);
 
 
-//delete product
-router.delete("/delete-place/:pid", deleteProductController)
+//delete blog
+router.delete("/delete-blog/:pid", deleteBlogController)
 
 //update
-router.route("/update-place/:pid", requireSignIn, isAdmin, formidable()).put(updateProductController);
+router.route("/update-blog/:pid", requireSignIn, isAdmin, formidable()).put(updateBlogController);
 
-// FILTER PRODUCT
-router.post("/place-filters", productFilterController);
+// FILTER blog
+router.post("/blog-filters", blogFilterController);
 
-// PRODUCT COUNT
-router.get("/place-count", productCountController);
+// BLOG COUNT
+router.get("/blog-count", blogCountController);
 
-// product per page
-router.get("/place-list/:page", productListController);
+// blog per page
+router.get("/blog-list/:page", blogListController);
 
-// search product 
-router.get("/search/:keyword", searchProductController);
+// search blog 
+router.get("/search/:keyword", searchBlogController);
 
-// similar products
-router.get("/related-place/:pid/:cid", relatedProductController);
+// similar blog
+router.get("/related-blog/:pid/:cid", relatedBlogController);
 
-// CATEGORY WISE PRODUCT 
-router.get("/place-category/:slug", productCategoryController);
+// CATEGORY WISE BLOG 
+router.get("/blog-category/:slug", blogCategoryController);
+
+// Save or unsave a blog
+router.post("/save/:blogId", requireSignIn, saveBlogController);
+
+// Get all saved blogs
+router.get("/saved-blogs", requireSignIn, getSavedBlogsController);
+
+
+//o route for banner......
+router.route("/create-banner", requireSignIn, isAdmin, formidable()).post( createBannerController);
+
+//! route for youtube
+router.route("/create-yt-vlog", requireSignIn, isAdmin, formidable()).post(createYoutubeVlogController);
+router.route("/get-yt-vlog").get(getYoutubeVlogController);
+router.route("/vlog-photo/:pid").get(youtubePhotoController);
+
+
 
 module.exports = router;

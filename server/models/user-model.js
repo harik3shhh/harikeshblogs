@@ -27,7 +27,10 @@ const userSchema = mongoose.Schema({
         required: true,
     },
 
-   
+    savedBlogs: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Blog"
+    }],
 
     role: {
         type: Number,

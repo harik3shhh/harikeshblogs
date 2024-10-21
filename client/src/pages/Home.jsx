@@ -1,9 +1,13 @@
 import React from 'react';
-import TravelBlog from './TravelBlog';
+
 import Weather from '../UI/Weather';
 import Banner from '../UI/Banner';
 import Stories from '../UI/Stories';
 import HomeBlogs from '../UI/HomeBlogs';
+// import VisitCount from '../UI/VisitCount';
+import TechBlogSlide from '../UI/TechBlogSlide';
+import TravelBlogSlide from '../UI/TravelBlogSlide';
+import YoutubeVlog from './youtubeVlog';
 
 
 const Home = () => {
@@ -12,11 +16,10 @@ const Home = () => {
       <Weather />
       {/* <Stories/> */}
       <Banner />
-
-
       <HomeBlogs />
-
-      <TravelBlog />
+      <YoutubeVlog />
+      <TechBlogSlide/>
+      <TravelBlogSlide/>
     </>
   );
 };

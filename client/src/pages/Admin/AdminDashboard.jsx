@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
-import { FaHome, FaUser, FaCog, FaSignOutAlt, FaUsers, FaServer, FaTasks, FaCalendarAlt, FaEnvelope } from 'react-icons/fa';
-
-
+import { FaUsers, FaServer, FaTasks, FaCalendarAlt, FaEnvelope, FaYoutube } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
 import Layout from '../../components/Layout';
 import { useAuth } from '../../context/auth';
+import { ThemeContext } from '../../context/ThemeContext';
 
 
 const AdminDashboard = () => {
   const [auth] = useAuth();
+  const {theme} = useContext(ThemeContext)
 
 
   return (
@@ -22,9 +22,9 @@ const AdminDashboard = () => {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto">
+      <main className="flex-1 p-4 overflow-y-auto">
         <div className="flex flex-col lg:flex-row lg:justify-between mb-8">
-          <h1 className={`text-black text-4xl font-extrabold mb-4 lg:mb-0`}>Welcome {!auth?.user ? "" : auth?.user.name} !</h1>
+          <h1 className={`${theme==="dark"?"text-white":"text-black"} text-4xl font-extrabold mb-4 lg:mb-0`}>Welcome {!auth?.user ? "" : auth?.user.name} !</h1>
           <div className="flex space-x-4">
             <button className="bg-gradient-to-r from-indigo-500 to-indigo-700 text-white px-6 py-3 rounded-lg hover:from-indigo-600 hover:to-indigo-800 transition-all duration-300 shadow-lg">
               Create New
@@ -50,12 +50,12 @@ const AdminDashboard = () => {
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105">
             <div className="flex items-center mb-4">
               <FaServer className="text-4xl text-green-500 mr-4" />
-              <h2 className="text-2xl font-bold">Manage Orders</h2>
+              <h2 className="text-2xl font-bold">Check Status</h2>
             </div>
             <p className="text-gray-400">Monitor the health of your system. View real-time status updates, track server performance, and manage system resources.</p>
-            <button className="mt-4 bg-gradient-to-r from-green-500 to-green-700 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-green-800 transition-all duration-300 shadow-lg">
+            <NavLink to={"/statistics"}><button className="mt-4 bg-gradient-to-r from-green-500 to-green-700 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-green-800 transition-all duration-300 shadow-lg">
               Check Status
-            </button>
+            </button></NavLink>
           </div>
 
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105">
@@ -65,7 +65,7 @@ const AdminDashboard = () => {
             </div>
             <ul className="space-y-2 text-sm">
               <li className="flex justify-between items-center">
-                <button className="bg-gray-700 p-2 rounded-lg">Create Category</button>
+               <NavLink to={"/create-category"}> <button className="bg-gray-700 p-2 rounded-lg">Create Category</button></NavLink>
                 {/* <span className="text-gray-400">Today</span> */}
               </li>
               <li className="flex justify-between items-center">
@@ -77,32 +77,28 @@ const AdminDashboard = () => {
                 {/* <span className="text-gray-400">This week</span> */}
               </li>
             </ul>
-            <button className="mt-4 bg-gradient-to-r from-purple-500 to-purple-700 text-white px-4 py-2 rounded-lg hover:from-purple-600 hover:to-purple-800 transition-all duration-300 shadow-lg">
+            <NavLink to={"/all-blogs"}><button className="mt-4 bg-gradient-to-r from-purple-500 to-purple-700 text-white px-4 py-2 rounded-lg hover:from-purple-600 hover:to-purple-800 transition-all duration-300 shadow-lg">
               View All Blogs
-            </button>
+            </button></NavLink>
           </div>
 
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105">
             <div className="flex items-center mb-4">
-              <FaCalendarAlt className="text-4xl text-orange-500 mr-4" />
-              <h2 className="text-2xl font-bold">Upcoming Events</h2>
+              <FaYoutube className="text-4xl text-red-500 mr-4" />
+              <h2 className="text-2xl font-bold">Banner & aYoutube Vlogs</h2>
             </div>
             <ul className="space-y-2 text-sm">
               <li className="flex justify-between items-center">
-                <span className="bg-gray-700 p-2 rounded-lg">Team Meeting</span>
-                <span className="text-gray-400">August 30</span>
+                <NavLink to={"/admin/create-banner"}><button className="bg-gray-700 p-2 rounded-lg">create banner</button></NavLink>
               </li>
               <li className="flex justify-between items-center">
-                <span className="bg-gray-700 p-2 rounded-lg">Server Maintenance</span>
-                <span className="text-gray-400">September 5</span>
+              <NavLink to={"/admin/create-yt-vlog"}><button className="bg-gray-700 p-2 rounded-lg">Youtube vlogs</button></NavLink>
+                
               </li>
-              <li className="flex justify-between items-center">
-                <span className="bg-gray-700 p-2 rounded-lg">Project Review</span>
-                <span className="text-gray-400">September 10</span>
-              </li>
+            
             </ul>
             <button className="mt-4 bg-gradient-to-r from-orange-500 to-orange-700 text-white px-4 py-2 rounded-lg hover:from-orange-600 hover:to-orange-800 transition-all duration-300 shadow-lg">
-              View Calendar
+              View Youtube
             </button>
           </div>
 
@@ -110,12 +106,12 @@ const AdminDashboard = () => {
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105">
             <div className="flex items-center mb-4">
               <FaEnvelope className="text-4xl text-teal-500 mr-4" />
-              <h2 className="text-2xl font-bold">FEEBACKS</h2>
+              <h2 className="text-2xl font-bold">Feedbacks</h2>
             </div>
             
-            <button className="mt-4 bg-gradient-to-r from-teal-500 to-teal-700 text-white px-4 py-2 rounded-lg hover:from-teal-600 hover:to-teal-800 transition-all duration-300 shadow-lg">
-              View All Messages
-            </button>
+            <NavLink to={"/get-feedback"}><button className="mt-4 bg-gradient-to-r from-teal-500 to-teal-700 text-white px-4 py-2 rounded-lg hover:from-teal-600 hover:to-teal-800 transition-all duration-300 shadow-lg">
+              View All Feedbacks
+            </button></NavLink>
           </div>
         </div>
       </main>

@@ -7,8 +7,10 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { Zoom } from 'react-toastify';
 import { AuthProvider } from './context/auth.jsx'
+import { ThemeProvider } from './context/ThemeContext.jsx'
 
 createRoot(document.getElementById('root')).render(
+  <ThemeProvider>
   <AuthProvider>
   <BrowserRouter>
   <ToastContainer
@@ -30,4 +32,5 @@ createRoot(document.getElementById('root')).render(
     <App />
   </BrowserRouter>
   </AuthProvider>
+  </ThemeProvider>
 )

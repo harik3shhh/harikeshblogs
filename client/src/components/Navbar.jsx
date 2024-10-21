@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { CiMenuBurger } from "react-icons/ci";
-import { IoMdClose } from "react-icons/io";
+import { IoMdClose, IoMdMoon } from "react-icons/io";
 import { FaYoutube } from "react-icons/fa";
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { Navigate, NavLink, useNavigate } from 'react-router-dom';
 import { CgProfile } from "react-icons/cg";
-import { BsChevronDown, BsChevronUp } from "react-icons/bs"; // Added BsChevronUp for the expanded state
+import { BsChevronDown, BsChevronUp, BsSun } from "react-icons/bs"; // Added BsChevronUp for the expanded state
 import { AiOutlineClose } from "react-icons/ai"; // Close icon
 import { useAuth } from '../context/auth';
 import {toast} from "react-toastify"
+import { ThemeContext } from '../context/ThemeContext';
 
 
 
@@ -17,6 +18,9 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [auth, setAuth] = useAuth();
+  const { theme, handleToggleTheme } = useContext(ThemeContext);
+
+
 
 
   const toggleMenu = () => {
@@ -43,12 +47,12 @@ const Navbar = () => {
 
   return (
     <>
-    <nav className="shadow-md rounded-lg sticky top-0 z-50 bg-[#fff]">
+    <nav className={`${theme==="dark"? "bg-black":"bg-white"}  shadow-md rounded-md sticky top-0 z-50`}>
     
       <div className="container lg:w-4/5 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
-            <NavLink to="/" className="text-3xl font-bold font-baskervville">BLOGS</NavLink>
+            <NavLink to="/" className={`${theme==="dark"?"text-white":"text-black"} text-3xl font-bold font-baskervville`}>BLOGS</NavLink>
           </div>
 
           {/* Hamburger Icon: Visible on md and below */}
@@ -62,11 +66,11 @@ const Navbar = () => {
           </div>
 
           {/* Tabs: Hidden on medium screens and below */}
-          <div className="hidden lg:flex space-x-8">
-            <NavLink to="/" className="text-gray-700 font-baskervville hover:text-blue-900">HOME</NavLink>
-            <NavLink to="/about" className="text-gray-700 font-baskervville hover:text-blue-900">ABOUT</NavLink>
-            <NavLink to="#" className="text-gray-700 font-baskervville hover:text-blue-900">TRAVEL BLOGS</NavLink>
-            <NavLink to="#" className="text-gray-700 font-baskervville hover:text-blue-900">FEEDBACK</NavLink>
+          <div className={` hidden lg:flex space-x-8`}>
+            <NavLink to="/" className={`${theme==="dark"?"text-white":"text-black"} font-baskervville hover:text-blue-900`}>HOME</NavLink>
+            <NavLink to="/about" className={`${theme==="dark"?"text-white":"text-black"} font-baskervville hover:text-blue-900`}>ABOUT</NavLink>
+            <NavLink to="/travel-blogs" className={`${theme==="dark"?"text-white":"text-black"} font-baskervville hover:text-blue-900`}>TRAVEL BLOGS</NavLink>
+            <NavLink to="/feedback" className={`${theme==="dark"?"text-white":"text-black"} font-baskervville hover:text-blue-900`}>FEEDBACK</NavLink>
           </div>
 
           {/* Profile Menu and Icons: Hidden on medium screens and below */}
@@ -75,10 +79,10 @@ const Navbar = () => {
             <div className="relative">
               <button
                 onClick={toggleProfileMenu}
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 focus:outline-none"
+                className={`${theme==="dark"?"text-white":"text-black"} inline-flex items-center justify-center p-2 rounded-md focus:outline-none`}
               >
                 <CgProfile size={30} className="mr-1" />
-                <span className="text-gray-700">{!auth?.user ? "GUEST" : auth?.user.name} </span>
+                <span className={`${theme==="dark"?"text-white":"text-black"}`}>{!auth?.user ? "GUEST" : auth?.user.name} </span>
                 {isProfileOpen ? <BsChevronUp className="ml-1" /> : <BsChevronDown className="ml-1" />}
               </button>
               <div
@@ -103,6 +107,15 @@ const Navbar = () => {
               </div>
             </div>
             {/* Social Icons */}
+            
+            <button
+            onClick={handleToggleTheme}
+            className={({ isActive }) => isActive ? "text-blue-500" : "hover:text-blue-500 text-white cursor-pointer"}
+          >
+            {theme === "dark" ? <BsSun className='text-yellow-400' size={25} /> : <IoMdMoon size={25} />}
+          </button>
+
+
             <NavLink to="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-gray-900">
               <FaInstagram size={30} className="w-6 h-6 text-pink-700 hover:text-pink-500" />
             </NavLink>
@@ -124,7 +137,7 @@ const Navbar = () => {
         <NavLink to="/" className="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">HOME</NavLink>
         <NavLink to="/about" className="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">ABOUT</NavLink>
         <NavLink to="#" className="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">TRAVEL BLOGS</NavLink>
-        <NavLink to="#" className="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">FEEDBACK</NavLink>
+        <NavLink to="/feedback" className="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">FEEDBACK</NavLink>
         {/* Mobile Single Dropdown Profile Menu */}
         <div className="relative">
           <button
@@ -147,9 +160,14 @@ const Navbar = () => {
                   <NavLink to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Profile</NavLink>
                   <NavLink to="/admin-dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Dashboard</NavLink>
                   <NavLink to="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Settings</NavLink>
+
+                  {!auth?.token ? (<>
                   <NavLink to="/login" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Login</NavLink>
                   <NavLink to="/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Sign up</NavLink>
+                  </>):(
+                  
                   <NavLink to={"/"} onClick={handleLogout} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Logout</NavLink>
+                )}
                 </div>
               </div>
             </div>

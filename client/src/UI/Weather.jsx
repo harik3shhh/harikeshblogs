@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { WiCloud } from 'react-icons/wi'; // Using react-icons for weather
+import { ThemeContext } from '../context/ThemeContext';
 
 const Weather = () => {
+  const { theme } = useContext(ThemeContext);
   const [greeting, setGreeting] = useState('');
   const [time, setTime] = useState(new Date());
 
@@ -34,8 +36,8 @@ const Weather = () => {
     <div className=" text-black p-4 gap-2 flex justify-between items-center rounded-md w-full max-w-full">
       {/* Left side: Greeting and Date */}
       <div className="flex flex-col justify-center">
-        <h1 className="text-xl lg:text-2xl font-semibold">{greeting}</h1>
-        <p className="mt-1 text-sm lg:text-md">{formatDate(time)}</p>
+        <h1 className={`${theme==="dark"?"text-white":"text-black"} text-xl lg:text-2xl font-semibold`}>{greeting}</h1>
+        <p className={`${theme==="dark"?"text-white":"text-black"} mt-1 text-sm lg:text-md`}>{formatDate(time)}</p>
       </div>
 
       {/* Right side: Weather card */}
