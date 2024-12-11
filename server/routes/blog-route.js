@@ -1,6 +1,6 @@
 const express = require("express");
 const {requireSignIn, isAdmin} = require("../middlewares/auth-middleware")
-const {createBlogController, getBlogController, getSingleBlog, blogPhotoController, deleteBlogController, updateBlogController, blogFilterController, blogCountController, blogListController, searchBlogController, relatedBlogController, blogCategoryController, getSavedBlogsController, saveBlogController, createBannerController, createYoutubeVlogController, getYoutubeVlogController, youtubePhotoController} = require("../controllers/blog-controller");
+const {createBlogController, getBlogController, getSingleBlog, blogPhotoController, deleteBlogController, updateBlogController, blogFilterController, blogCountController, blogListController, searchBlogController, relatedBlogController, blogCategoryController, getSavedBlogsController, saveBlogController, createBannerController, createYoutubeVlogController, getYoutubeVlogController, youtubePhotoController, deleteBannerController, getBannerController, bannerPhotoController} = require("../controllers/blog-controller");
 const formidable = require("express-formidable");
 
 const router = express.Router();
@@ -47,6 +47,12 @@ router.get("/saved-blogs", requireSignIn, getSavedBlogsController);
 
 //o route for banner......
 router.route("/create-banner", requireSignIn, isAdmin, formidable()).post( createBannerController);
+router.delete("/delete-banner/:pid", deleteBannerController);
+router.route("/get-banner").get(getBannerController);
+router.route("/banner-photo/:pid").get(bannerPhotoController);
+
+
+
 
 //! route for youtube
 router.route("/create-yt-vlog", requireSignIn, isAdmin, formidable()).post(createYoutubeVlogController);

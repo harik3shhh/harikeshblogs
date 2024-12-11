@@ -21,7 +21,7 @@ const AllBlogs = () => {
   // Fetch blogs based on the selected category slug or all blogs
   const getBlog = async (slug = '') => {
     try {
-      const endpoint = slug ? `http://localhost:8000/api/v1/blog/blog-category/${slug}` : 'http://localhost:8000/api/v1/blog/get-blog';
+      const endpoint = slug ? `${import.meta.env.VITE_BASE_URL}/api/v1/blog/blog-category/${slug}` : `${import.meta.env.VITE_BASE_URL}/api/v1/blog/get-blog`;
       const { data } = await axios.get(endpoint);
       setBlogs(data?.blogs);
       setNoBlogs(data?.blogs.length === 0);
@@ -34,7 +34,7 @@ const AllBlogs = () => {
   // Fetch categories
   const getAllCategory = async () => {
     try {
-      const { data } = await axios.get('http://localhost:8000/api/v1/category/get-category');
+      const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/category/get-category`);
       if (data?.success) {
         setCategories(data?.category);
       }
@@ -51,7 +51,7 @@ const AllBlogs = () => {
 
   const getTotal = async () => {
     try {
-      const { data } = await axios.get('http://localhost:8000/api/v1/blog/blog-count');
+      const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/blog/blog-count`);
       setTotal(data?.total);
     } catch (error) {
       console.log(error);
@@ -63,7 +63,7 @@ const AllBlogs = () => {
     try {
       let answer = window.prompt('Are you sure you want to delete this blog?');
       if (!answer) return;
-      const { data } = await axios.delete(`http://localhost:8000/api/v1/blog/delete-blog/${id}`);
+      const { data } = await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/v1/blog/delete-blog/${id}`);
       toast.success('Blog Deleted Successfully');
       getBlog(selectedCategory); // Refresh the blogs after deletion
     } catch (error) {
@@ -83,8 +83,8 @@ const AllBlogs = () => {
     <Layout>
       <div className=" min-h-screen py-8 flex justify-center">
         <div className="w-full max-w-6xl p-6">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-            <h1 className="text-4xl font-bold text-gray-800 mb-4 md:mb-0">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16">
+            <h1 className="text-4xl font-bold text-indigo-500 mb-4 md:mb-0">
               BLOGS YOU PUBLISHED
             </h1>
 
@@ -125,7 +125,7 @@ const AllBlogs = () => {
                     {/* Blog Photo on the left */}
                     <img
                       className="w-full md:w-64 h-48 object-cover"
-                      src={`http://localhost:8000/api/v1/blog/blog-photo/${b._id}`}
+                      src={`${import.meta.env.VITE_BASE_URL}/api/v1/blog/blog-photo/${b._id}`}
                       alt="Blog"
                     />
 

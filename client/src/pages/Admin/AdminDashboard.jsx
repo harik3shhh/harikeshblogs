@@ -50,11 +50,11 @@ const AdminDashboard = () => {
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105">
             <div className="flex items-center mb-4">
               <FaServer className="text-4xl text-green-500 mr-4" />
-              <h2 className="text-2xl font-bold">Check Status</h2>
+              <h2 className="text-2xl font-bold">Check Stats</h2>
             </div>
-            <p className="text-gray-400">Monitor the health of your system. View real-time status updates, track server performance, and manage system resources.</p>
+            <p className="text-gray-400">Monitor the Statistics of your Blogs. View real-time status updates, track performance, and manage resources.</p>
             <NavLink to={"/statistics"}><button className="mt-4 bg-gradient-to-r from-green-500 to-green-700 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-green-800 transition-all duration-300 shadow-lg">
-              Check Status
+              Check Stats
             </button></NavLink>
           </div>
 
@@ -85,7 +85,7 @@ const AdminDashboard = () => {
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105">
             <div className="flex items-center mb-4">
               <FaYoutube className="text-4xl text-red-500 mr-4" />
-              <h2 className="text-2xl font-bold">Banner & aYoutube Vlogs</h2>
+              <h2 className="text-2xl font-bold">Banner & Youtube Vlogs</h2>
             </div>
             <ul className="space-y-2 text-sm">
               <li className="flex justify-between items-center">

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 import axios from "axios";
 import { toast } from 'react-toastify';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'; // Importing icons
 import Layout from '../../components/Layout';
+import { ThemeContext } from '../../context/ThemeContext';
 
 
 const Register = () => {
@@ -12,6 +13,7 @@ const Register = () => {
   const [passwordStrength, setPasswordStrength] = useState(null);
   const [passwordMatch, setPasswordMatch] = useState(null); // New state for password match
   const navigate = useNavigate();
+  const {theme} = useContext(ThemeContext)
 
 
   const [input, setInput] = useState({
@@ -54,7 +56,7 @@ const Register = () => {
     }
 
     try {
-      const { data } = await axios.post("http://localhost:8000/api/auth/register", input);
+      const { data } = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/auth/register`, input);
       if (data?.success) {
         setInput({ name: "", email: "", phone: "", password: "", cpassword: "", answer: "" });
         toast.success("Registration Successful!");
@@ -79,7 +81,7 @@ const Register = () => {
       <div
         className={`flex justify-center items-center m-4 min-h-screen rounded-lg`}>
         <div className={` rounded-lg shadow-2xl p-6 lg:p-8 w-full max-w-md`}>
-          <h2 className={`text-2xl font-bold font-crimson mb-6 text-center `}>REGISTRATION</h2>
+          <h2 className={`${theme==="dark"?"text-white":"text-black"} text-2xl font-bold font-crimson mb-6 text-center `}>REGISTRATION</h2>
           <form onSubmit={handleSubmit}>
             <input
               type='text'
@@ -160,7 +162,7 @@ const Register = () => {
               Sign Up
             </button>
           </form>
-          <p className={`text-center `}>
+          <p className={`text-center ${theme==="dark"?"text-white":"text-black"}`}>
             Already have an account? <NavLink to='/login' className='text-blue-600 hover:text-blue-500'>Sign in</NavLink>
           </p>
         </div>

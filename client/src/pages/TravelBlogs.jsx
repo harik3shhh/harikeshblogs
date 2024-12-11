@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import { Link, NavLink } from 'react-router-dom';
 import axios from 'axios';
+import { ThemeContext } from '../context/ThemeContext';
 
 const TravelBlogs = () => {
   const [blogs, setBlogs] = useState([]);
+  const {theme} = useContext(ThemeContext);
 
   // Fetch tech blogs by category slug (e.g., 'tech')
   const getTravelBlogs = async () => {
     try {
       // Assuming 'tech' is the category slug for tech blogs
-      const { data } = await axios.get('http://localhost:8000/api/v1/blog/blog-category/travel-blogs');
+      const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/blog/blog-category/travel-blogs`);
       setBlogs(data?.blogs || []);
     } catch (error) {
       console.error('Error fetching tech blogs:', error);
@@ -27,7 +29,7 @@ const TravelBlogs = () => {
       <div className="min-h-screen mx-auto my-8 p-4">
         {/* Header with Title and View More Button */}
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">Travel Blogs</h2>
+          <h2 className={`${theme==="dark"?"text-white":"text-black"} text-2xl m-auto mb-8 font-bold`}>TRAVEL BLOGS - Read Feel & Explore</h2>
          
         </div>
 
@@ -40,7 +42,7 @@ const TravelBlogs = () => {
       <div className="bg-white rounded-lg transition-shadow lg:h-[440px] duration-300">
         <img
           className="rounded-t-lg h-48 w-full object-cover"
-          src={`http://localhost:8000/api/v1/blog/blog-photo/${b._id}`}
+          src={`${import.meta.env.VITE_BASE_URL}/api/v1/blog/blog-photo/${b._id}`}
           alt="Blog"
         />
         <div className="p-4">

@@ -26,6 +26,7 @@ import Statistics from './pages/Admin/Statistics';
 import TechBlogs from './pages/TechBlogs';
 import CreateBanner from './pages/Admin/CreateBanner';
 import CreateYoutubeVlog from './pages/Admin/CreateYoutubeVlog';
+import BlogsHub from './pages/BlogsHub';
 
 
 
@@ -57,8 +58,7 @@ const App = () => {
         <Route path='/feedback' element={<Feedback/>} />
         <Route path='/travel-blogs' element={<TravelBlogs/>} />
         <Route path='/tech-blogs' element={<TechBlogs/>} />
-
-
+        <Route path='/blogshub' element={<BlogsHub/>} />
 
 
 

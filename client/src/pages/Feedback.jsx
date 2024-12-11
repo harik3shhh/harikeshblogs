@@ -25,7 +25,7 @@ const Feedback = () => {
     e.preventDefault();
 
     try {
-      const {data}  = await axios.post(`http://localhost:8000/api/auth/feedback`, input);
+      const {data}  = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/auth/feedback`, input);
       if(data.success){
         setInput({name: "", email:"", message: ""});
         toast.success("Feedback sent success!");

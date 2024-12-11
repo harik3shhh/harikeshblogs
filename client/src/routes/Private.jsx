@@ -9,7 +9,7 @@ export default function PrivateRoute(){
     const [auth, setAuth] = useAuth();
 
     useEffect(()=> {
-        const url = "https://tourismhost-ubpc.vercel.app/api/auth/user-auth";
+        const url = `${import.meta.env.VITE_BASE_URL}/api/auth/user-auth`;
         const authCheck = async()=>{
             const res = await fetch(url, {
                 method: "GET",

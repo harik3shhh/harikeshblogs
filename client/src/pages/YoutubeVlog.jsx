@@ -12,9 +12,9 @@ const YoutubeVlog = () => {
 
   const getYoutubeVlog = async() =>{
     try {
-      const {data} = await axios.get(`http://localhost:8000/api/v1/blog/get-yt-vlog`);
+      const {data} = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/blog/get-yt-vlog`);
       if(data?.success){
-        console.log(data?.vlog)
+    
         setYoutube(data?.vlog)
       }
       
@@ -90,7 +90,7 @@ const YoutubeVlog = () => {
               <NavLink to={`${blog?.link}` } target='_blank' rel="noopener noreferrer">
               <div className="flex flex-col lg:flex-row bg-white rounded-lg overflow-hidden shadow-lg h-[300px] lg:h-[250px]">
                 <img
-                  src={`http://localhost:8000/api/v1/blog/vlog-photo/${blog._id}`}
+                  src={`${import.meta.env.VITE_BASE_URL}/api/v1/blog/vlog-photo/${blog._id}`}
                   alt={blog.title}
                   className="lg:w-1/2 w-full h-full object-cover"
                 />

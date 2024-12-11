@@ -24,7 +24,7 @@ const UpdateBlog = () => {
   // Fetch single blog
   const getSingleBlog = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:8000/api/v1/blog/get-blog/${params.slug}`);
+      const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/blog/get-blog/${params.slug}`);
       setTitle(data.blog.title);
       setCaption(data.blog.caption);
       setDescription(data.blog.description);
@@ -44,7 +44,7 @@ const UpdateBlog = () => {
   // Fetch all categories
   const getAllCategory = async () => {
     try {
-      const { data } = await axios.get('http://localhost:8000/api/v1/category/get-category');
+      const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/category/get-category`);
       if (data?.success) {
         setCategories(data?.category);
       }
@@ -75,7 +75,7 @@ const UpdateBlog = () => {
       }
 
       const { data } = await axios.put(
-        `http://localhost:8000/api/v1/blog/update-blog/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/api/v1/blog/update-blog/${id}`,
         blogData,
         {
           headers: {
@@ -140,7 +140,7 @@ const UpdateBlog = () => {
               />
             ) : (
               <img
-                src={`http://localhost:8000/api/v1/blog/blog-photo/${id}`}
+                src={`${import.meta.env.VITE_BASE_URL}/api/v1/blog/blog-photo/${id}`}
                 alt="Current Blog Image"
                 className="h-48 mx-auto"
               />

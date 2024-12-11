@@ -10,7 +10,7 @@ const TechBlogs = () => {
   const getTravelBlogs = async () => {
     try {
       // Assuming 'tech' is the category slug for tech blogs
-      const { data } = await axios.get('http://localhost:8000/api/v1/blog/blog-category/tech-blogs');
+      const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/blog/blog-category/tech-blogs`);
       setBlogs(data?.blogs || []);
     } catch (error) {
       console.error('Error fetching tech blogs:', error);
@@ -27,7 +27,7 @@ const TechBlogs = () => {
       <div className="min-h-screen mx-auto my-8 p-4">
         {/* Header with Title and View More Button */}
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">Travel Blogs</h2>
+          <h2 className="text-2xl font-bold">TECH BLOGS</h2>
          
         </div>
 
@@ -40,7 +40,7 @@ const TechBlogs = () => {
       <div className="bg-white rounded-lg transition-shadow lg:h-[440px] duration-300">
         <img
           className="rounded-t-lg h-48 w-full object-cover"
-          src={`http://localhost:8000/api/v1/blog/blog-photo/${b._id}`}
+          src={`${import.meta.env.VITE_BASE_URL}/api/v1/blog/blog-photo/${b._id}`}
           alt="Blog"
         />
         <div className="p-4">

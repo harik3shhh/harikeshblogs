@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import { Link, NavLink } from 'react-router-dom';
 import axios from 'axios';
+import { ThemeContext } from '../context/ThemeContext';
 
 const TechBlogSlide = () => {
   const [blogs, setBlogs] = useState([]);
+  const {theme} = useContext(ThemeContext);
 
   // Fetch travel blogs by category slug
   const getTravelBlogs = async () => {
     try {
-      const { data } = await axios.get('http://localhost:8000/api/v1/blog/blog-category/tech-blogs');
+      const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/blog/blog-category/tech-blogs`);
       setBlogs(data?.blogs || []);
     } catch (error) {
       console.error('Error fetching travel blogs:', error);
@@ -25,9 +27,9 @@ const TechBlogSlide = () => {
     <Layout>
       <div className="container mx-auto my-8 p-4">
         {/* Header with Title and View More Button */}
-        <div className="flex justify-between items-center mb-12">
-          <h2 className="text-2xl font-bold">Travel Blogs</h2>
-          <NavLink to={"/travel-blogs"}>
+        <div className="flex justify-between items-center mb-8">
+          <h2 className={`${theme==="dark"?"text-white":"text-gray-800"} text-2xl font-bold`}>Tech Blogs</h2>
+          <NavLink to={"/tech-blogs"}>
             <button className="bg-[#2e2d2d] text-white px-4 py-2 rounded-full hover:bg-[#232323]">
               View More
             </button>
@@ -58,7 +60,7 @@ const TechBlogSlide = () => {
                     {/* Left side: Image */}
                     <div className="w-2/5 h-full">
                       <img
-                        src={`http://localhost:8000/api/v1/blog/blog-photo/${blog._id}`} // Assuming 'image' field contains the image URL from backend
+                        src={`${import.meta.env.VITE_BASE_URL}/api/v1/blog/blog-photo/${blog._id}`} // Assuming 'image' field contains the image URL from backend
                         alt={blog.title}
                         className="h-full w-full object-cover"
                       />

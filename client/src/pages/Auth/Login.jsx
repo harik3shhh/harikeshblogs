@@ -1,17 +1,19 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/Layout';
 import { useAuth } from '../../context/auth';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const Login = () => {
   const [auth, setAuth] = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const {theme}  = useContext(ThemeContext)
 
 
   //o
@@ -42,7 +44,7 @@ const Login = () => {
 
     try {
 
-      const { data } = await axios.post("http://localhost:8000/api/auth/login", input);
+      const { data } = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/auth/login`, input);
 
       if (data?.success) {
         setInput({ email: "", password: "" });
@@ -74,7 +76,7 @@ const Login = () => {
       <div
         className={`flex justify-center items-center m-4 min-h-screen rounded-lg `}>
         <div className={` rounded-lg shadow-2xl p-6 lg:p-8 w-full max-w-md`}>
-          <h2 className={`text-2xl font-crimson font-bold mb-6 text-center `}>LOGIN</h2>
+          <h2 className={`${theme==="dark"?"text-white":"text-black"} text-2xl font-crimson font-bold mb-6 text-center `}>LOGIN</h2>
           <form className="space-y-4" onSubmit={handleSubmit}>
             <input
               type="email"
@@ -110,7 +112,7 @@ const Login = () => {
             </button>
           </form>
           <div className="flex justify-between mt-4">
-            <p className={``}>
+            <p className={`${theme==="dark"?"text-white":"text-black"}`}>
               New user? <NavLink to="/register" className="text-blue-600 hover:text-blue-500">Sign up</NavLink>
             </p>
             <p className="text-white">

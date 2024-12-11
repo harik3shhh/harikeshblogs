@@ -1,20 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import { Link } from 'react-router-dom';
 import tourindia from "../assets/tourindia.jpg";
 import axios from "axios";
 import { FaPlus, FaSpinner, FaBookmark } from 'react-icons/fa'; // Import save icon
 import { IoAddSharp } from "react-icons/io5";
+import { ThemeContext } from '../context/ThemeContext';
 
 const HomeBlogs = () => {
   const [blogs, setBlogs] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const {theme} = useContext(ThemeContext)
 
   const getBlog = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:8000/api/v1/blog/blog-list/${page}`);
+      const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/blog/blog-list/${page}`);
       setBlogs(data?.blogs);
     } catch (error) {
       console.log(error);
@@ -28,7 +30,7 @@ const HomeBlogs = () => {
 
   const getTotal = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8000/api/v1/blog/blog-count");
+      const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/blog/blog-count`);
       setTotal(data?.total);
     } catch (error) {
       console.log(error);
@@ -43,7 +45,7 @@ const HomeBlogs = () => {
   const loadMore = async () => {
     try {
       setLoading(true);
-      const { data } = await axios(`http://localhost:8000/api/v1/blog/blog-list/${page}`);
+      const { data } = await axios(`${import.meta.env.VITE_BASE_URL}/api/v1/blog/blog-list/${page}`);
       setLoading(false);
       setBlogs([...blogs, ...data?.blogs]);
     } catch (error) {
@@ -56,7 +58,7 @@ const HomeBlogs = () => {
   const handleSaveBlog = async (blogId) => {
     try {
       // Assuming you have an authenticated user
-      const { data } = await axios.post(`${VITE_BASE_URL}/api/v1/blog/save-blog`, { blogId });
+      const { data } = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/blog/save-blog`, { blogId });
       alert("Blog saved successfully!");
     } catch (error) {
       console.log(error);
@@ -69,8 +71,8 @@ const HomeBlogs = () => {
       <Layout title={"Home - Blogs travel and tech"}>
         <div className="min-h-screen py-8 flex justify-center">
           <div className="w-full rounded-lg p-6">
-            <h1 className="text-4xl font-bold text-center text-gray-800 mb-6">Welcome to Our Blog</h1>
-            <p className="text-center text-gray-600 mb-8">
+            <h1 className={`${theme==="dark"?"text-white":"text-gray-800"} text-4xl font-bold text-center mb-6`}>Welcome to <span className='text-red-600'> [name] </span> – where ideas spark, stories connect, and inspiration flows. Dive in and explore a world crafted just for you!</h1>
+            <p className={`${theme==="dark"?"text-gray-300":"text-gray-600"} text-center mb-16`}>
               Stay updated with the latest news, tips, and insights from our blogs.
             </p>
 
@@ -84,7 +86,7 @@ const HomeBlogs = () => {
                     <div className="bg-white rounded-lg transition-shadow lg:h-[440px] duration-300">
                       <img
                         className="rounded-t-lg h-48 w-full object-cover"
-                        src={`http://localhost:8000/api/v1/blog/blog-photo/${b._id}`}
+                        src={`${import.meta.env.VITE_BASE_URL}/api/v1/blog/blog-photo/${b._id}`}
                         alt="Blog"
                       />
                       <div className="p-4">

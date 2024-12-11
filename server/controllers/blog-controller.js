@@ -202,7 +202,7 @@ const blogCountController = async(req, res) =>{
         console.log(error);
         res.status(400).send({
             success: false,
-            message: "Error in Count product",
+            message: "Error in Count Blog",
             error
         });
     }
@@ -383,48 +383,111 @@ const createBannerController = async(req, res) =>{
 }
 
 
-//! YOUTUBE VLOG CONTROLLER
-const createYoutubeVlogController = async(req, res) =>{
+//o DELETE BANNER CONTROLLER
+const deleteBannerController = async(req, res) =>{
     try {
-        const {title, desc, link} = req.fields;
-        const { photo } = req.files;
-
-
-        //validation
-        switch(true){
-            case !title:
-                return res.status(500).send({error: "Youtube title is required"});
-
-            case !link:
-                return res.status(500).send({error: "link is required"});
-
-            case !desc:
-                return res.status(500).send({error: "Vlog Desc is required"});    
-
-            case !photo && (!photo ||photo.size > 10000):
-                return res.status(500).send({error: "Photo is required and should be less than 1 mb"});
-        }
-
-        const blogs = new youtubeModel({...req.fields});
-        if(photo){
-            blogs.photo.data = fs.readFileSync(photo.path);
-            blogs.photo.contentType = photo.type;
-        }
-
-        await blogs.save();
-        res.status(201).send({
+        await bannerModel.findByIdAndDelete(req.params.pid).select("-photo");
+        res.status(200).send({
             success: true,
-            message: "Youtube Vlog saved successfully",
-            blogs,
+            message: "Banner deleted Successfully"
         });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: "Error while deleting banner",
+            error
+        });
+    }
+};
+
+//O GET BANNER CONTROLLER
+const getBannerController = async(req, res) =>{
+    try {
+        const banner = await bannerModel.find({})
+        if(!banner){
+            return res.status(404).send({
+                success: false,
+                message:"Cannot get banner"
+
+            });
+
+        }
+        res.status(200).send({
+            success: true,
+            message: "fetched banner!",
+            banner,
+        })
+
     } catch (error) {
         res.status(500).send({
             success: false,
-            message: "Something went wrong while create vlog",
+            message: "Unable to get banner!",
             error,
         })
     }
 };
+
+const bannerPhotoController = async(req, res) => {
+    try {
+        const bannerPhoto = await bannerModel.findById(req.params.pid).select("photo");
+        if(bannerPhoto.photo.data){
+            res.set("Content-type", bannerPhoto.photo.contentType)
+            return res.status(200).send(bannerPhoto.photo.data);
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: "Error while getting photo",
+            error
+        });
+    }
+};
+
+
+//! YOUTUBE VLOG CONTROLLER
+    const createYoutubeVlogController = async(req, res) =>{
+        try {
+            const {title, desc, link} = req.fields;
+            const { photo } = req.files;
+
+
+            //validation
+            switch(true){
+                case !title:
+                    return res.status(500).send({error: "Youtube title is required"});
+
+                case !link:
+                    return res.status(500).send({error: "link is required"});
+
+                case !desc:
+                    return res.status(500).send({error: "Vlog Desc is required"});    
+
+                case !photo && (!photo ||photo.size > 10000):
+                    return res.status(500).send({error: "Photo is required and should be less than 1 mb"});
+            }
+
+            const blogs = new youtubeModel({...req.fields});
+            if(photo){
+                blogs.photo.data = fs.readFileSync(photo.path);
+                blogs.photo.contentType = photo.type;
+            }
+
+            await blogs.save();
+            res.status(201).send({
+                success: true,
+                message: "Youtube Vlog saved successfully",
+                blogs,
+            });
+        } catch (error) {
+            res.status(500).send({
+                success: false,
+                message: "Something went wrong while create vlog",
+                error,
+            })
+        }
+    };
 
 
 //! GET YOUTUBE VLOGS
@@ -473,5 +536,4 @@ const youtubePhotoController = async(req, res) => {
 };
 
 
-
-module.exports = {createBlogController, getBlogController, getSingleBlog, blogPhotoController, deleteBlogController, updateBlogController, blogFilterController, blogCountController, blogListController, searchBlogController, relatedBlogController, blogCategoryController, saveBlogController, getSavedBlogsController, createBannerController, createYoutubeVlogController, getYoutubeVlogController, youtubePhotoController};
+module.exports = {createBlogController, getBlogController, getSingleBlog, blogPhotoController, deleteBlogController, updateBlogController, blogFilterController, blogCountController, blogListController, searchBlogController, relatedBlogController, blogCategoryController, saveBlogController, getSavedBlogsController, createBannerController, createYoutubeVlogController, getYoutubeVlogController, youtubePhotoController, deleteBannerController, getBannerController, bannerPhotoController};

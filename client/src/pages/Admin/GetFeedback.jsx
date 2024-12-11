@@ -7,7 +7,7 @@ const GetFeedback = () => {
 
   const getFeedback = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:8000/api/auth/get-feedback`);
+      const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/auth/get-feedback`);
       if (data?.success) {
         // Sort feedback by createdAt in descending order (latest first)
         const sortedFeedback = data.feedback.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));

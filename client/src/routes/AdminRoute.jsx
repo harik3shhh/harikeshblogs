@@ -9,7 +9,7 @@ export default function AdminRoute(){
     const [auth, setAuth] = useAuth();
 
     useEffect(()=> {
-        const url = "http://localhost:8000/api/auth/admin-auth";
+        const url = `${import.meta.env.VITE_BASE_URL}/api/auth/admin-auth`;
         const authCheck = async()=>{
             const res = await fetch(url, {
                 method: "GET",

@@ -37,6 +37,24 @@ const getFeedbackController = async(req, res)=>{
             console.log(error);
             
         }
-    }
+}
 
-module.exports = {feedbackController, getFeedbackController}
+//* feedbacks count.
+const feedbackCountController = async(req, res)=>{
+    try {
+        const totalFeedback = await Feedback.find({}).estimatedDocumentCount();
+        res.status(200).send({
+            success: true,
+            message: "Fetched total feedback.",
+            totalFeedback
+        })
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            message: "Unable to fetch count of ther feedback.",
+            error
+        })
+    }
+}
+
+module.exports = {feedbackController, getFeedbackController, feedbackCountController}

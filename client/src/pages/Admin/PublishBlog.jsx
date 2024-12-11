@@ -29,7 +29,7 @@ const PublishBlog = () => {
 
   const getAllCategory = async () => {
     try {
-      const { data } = await axios.get('http://localhost:8000/api/v1/category/get-category');
+      const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/category/get-category`);
       if (data?.success) {
         setCategories(data?.category);
       }
@@ -60,7 +60,7 @@ const PublishBlog = () => {
       blogData.append('author', author);
       blogData.append('publishDate', publishDate);
 
-      const { data } = await axios.post('http://localhost:8000/api/v1/blog/create-blog', blogData);
+      const { data } = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/blog/create-blog`, blogData);
       if (data?.success) {
         toast.success('Blog Created Successfully');
         navigate('/');

@@ -52,7 +52,7 @@ const Navbar = () => {
       <div className="container lg:w-4/5 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
-            <NavLink to="/" className={`${theme==="dark"?"text-white":"text-black"} text-3xl font-bold font-baskervville`}>BLOGS</NavLink>
+            <NavLink to="/" className={`${theme==="dark"?"text-white":"text-black"} text-3xl font-bold font-crimsonpro`}>BLOGS</NavLink>
           </div>
 
           {/* Hamburger Icon: Visible on md and below */}
@@ -66,11 +66,16 @@ const Navbar = () => {
           </div>
 
           {/* Tabs: Hidden on medium screens and below */}
-          <div className={` hidden lg:flex space-x-8`}>
-            <NavLink to="/" className={`${theme==="dark"?"text-white":"text-black"} font-baskervville hover:text-blue-900`}>HOME</NavLink>
-            <NavLink to="/about" className={`${theme==="dark"?"text-white":"text-black"} font-baskervville hover:text-blue-900`}>ABOUT</NavLink>
-            <NavLink to="/travel-blogs" className={`${theme==="dark"?"text-white":"text-black"} font-baskervville hover:text-blue-900`}>TRAVEL BLOGS</NavLink>
-            <NavLink to="/feedback" className={`${theme==="dark"?"text-white":"text-black"} font-baskervville hover:text-blue-900`}>FEEDBACK</NavLink>
+          <div className={` hidden lg:flex space-x-8 text-xl`}>
+            <NavLink to="/" className={`${theme==="dark"?"text-white":"text-black"} font-crimsonpro hover:text-blue-900`}>HOME</NavLink>
+
+            <NavLink to="/about" className={`${theme==="dark"?"text-white":"text-black"} font-crimsonpro hover:text-blue-900`}>ABOUT</NavLink>
+
+            <NavLink to="/blogshub" className={`${theme==="dark"?"text-white":"text-black"} font-crimsonpro hover:text-blue-900`}>ALL-BLOGS</NavLink>
+
+
+            <NavLink to="/travel-blogs" className={`${theme==="dark"?"text-white":"text-black"} font-crimsonpro hover:text-blue-900`}>TRAVEL BLOGS</NavLink>
+            <NavLink to="/feedback" className={`${theme==="dark"?"text-white":"text-black"} font-crimsonpro hover:text-blue-900`}>FEEDBACK</NavLink>
           </div>
 
           {/* Profile Menu and Icons: Hidden on medium screens and below */}
@@ -94,7 +99,7 @@ const Navbar = () => {
                   
                   <NavLink to="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900">Profile</NavLink>
 
-                  <NavLink to="/admin-dashboard" className="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900">Dashboard</NavLink>
+                  <NavLink to="/admin-dashboard" className="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900">Admin Dashboard</NavLink>
                   <NavLink to="/settings" className="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900">Settings</NavLink>
 
                   {!auth?.user ? (<>
@@ -136,7 +141,10 @@ const Navbar = () => {
       <div className={`px-2 pt-2 pb-3 sm:px-3 ${isOpen ? 'block' : 'hidden'} lg:hidden`}>
         <NavLink to="/" className="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">HOME</NavLink>
         <NavLink to="/about" className="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">ABOUT</NavLink>
-        <NavLink to="#" className="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">TRAVEL BLOGS</NavLink>
+        
+        <NavLink to="/blogshubz" className="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">ALL-BLOGS</NavLink>
+
+        <NavLink to="/travel-blogs" className="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">TRAVEL BLOGS</NavLink>
         <NavLink to="/feedback" className="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">FEEDBACK</NavLink>
         {/* Mobile Single Dropdown Profile Menu */}
         <div className="relative">
@@ -158,7 +166,11 @@ const Navbar = () => {
                 </div>
                 <div className="py-1">
                   <NavLink to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Profile</NavLink>
+                  
+
                   <NavLink to="/admin-dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Dashboard</NavLink>
+
+
                   <NavLink to="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Settings</NavLink>
 
                   {!auth?.token ? (<>

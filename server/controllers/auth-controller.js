@@ -211,6 +211,24 @@ const deleteUser = async(req, res)=>{
     }
 }
 
+//* users count.
+const userCountController = async(req, res)=>{
+    try {
+        const totalUser = await User.find({}).estimatedDocumentCount();
+        res.status(200).send({
+            success: true,
+            message: "Fetched total users.",
+            totalUser
+        })
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            message: "Unable to fetch count of ther users.",
+            error
+        })
+    }
+}
+
 
 //* Update profile user.
 
@@ -218,4 +236,4 @@ const deleteUser = async(req, res)=>{
 //* REVIEWS FROM THE USER => MONGODB
 
 
-module.exports = {register, login, testAdmin, getAllUser, deleteUser, adminAccess}
+module.exports = {register, login, testAdmin, getAllUser, deleteUser, adminAccess, userCountController}

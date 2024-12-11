@@ -22,7 +22,7 @@ const GetUser = () => {
         };
 
         try {
-            const { data } = await axios.get("http://localhost:8000/api/auth/get-all-user", config);
+            const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/auth/get-all-user`, config);
             // Sorting users: admins first, then non-admins alphabetically
             const sortedUsers = data?.allusers.sort((a, b) => {
                 if (a.role === 1 && b.role !== 1) return -1; // Admins first
@@ -51,7 +51,7 @@ const GetUser = () => {
         };
 
         try {
-            const { data } = await axios.delete(`http://localhost:8000/api/auth/delete-user/${id}`, config);
+            const { data } = await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/auth/delete-user/${id}`, config);
             if (data?.success) {
                 toast.success("USER DELETED");
                 getUser();
@@ -71,7 +71,7 @@ const GetUser = () => {
         };
 
         try {
-            const { data } = await axios.put(`http://localhost:8000/api/auth/admin-access/${id}`, { role: newRole }, config);
+            const { data } = await axios.put(`${import.meta.env.VITE_BASE_URL}/api/auth/admin-access/${id}`, { role: newRole }, config);
             if (data?.success) {
                 toast.success("User role updated");
                 getUser();

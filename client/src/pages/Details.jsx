@@ -9,6 +9,15 @@ const Details = () => {
   const [relatedBlogs, setRelatedBlogs] = useState([]);
   const [isExpanded, setIsExpanded] = useState(false); // State for managing description toggle
 
+  // Helper function to format date to dd-mm-yyyy
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
   // initial details
   useEffect(() => {
     if (params?.slug) getBlog();
@@ -17,7 +26,7 @@ const Details = () => {
   // GET BLOG DETAILS
   const getBlog = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:8000/api/v1/blog/get-blog/${params.slug}`);
+      const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/blog/get-blog/${params.slug}`);
       setBlog(data?.blog);
 
       // Fetch related blogs based on blog ID and category ID
@@ -32,7 +41,7 @@ const Details = () => {
   // GET RELATED BLOGS
   const getRelatedBlogs = async (pid, cid) => {
     try {
-      const { data } = await axios.get(`http://localhost:8000/api/v1/blog/related-blog/${pid}/${cid}`);
+      const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/blog/related-blog/${pid}/${cid}`);
       if (data?.success) {
         setRelatedBlogs(data?.blogs);
       }
@@ -44,7 +53,7 @@ const Details = () => {
   // GET ALL BLOGS FOR RECOMMENDED BLOGS
   const getAllBlogs = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:8000/api/v1/blog/get-blog`);
+      const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/blog/get-blog`);
       if (data?.success) {
         // Shuffle the blogs array randomly
         const shuffledBlogs = data?.blogs.sort(() => 0.5 - Math.random());
@@ -84,7 +93,7 @@ const Details = () => {
             <div className="mb-6">
               <img
                 className="w-full h-64 object-contain rounded-md"
-                src={`http://localhost:8000/api/v1/blog/blog-photo/${blog._id}`}
+                src={`${import.meta.env.VITE_BASE_URL}/api/v1/blog/blog-photo/${blog._id}`}
                 alt="Blog Post"
               />
             </div>
@@ -94,7 +103,7 @@ const Details = () => {
               <h1 className="text-3xl font-bold mb-2">{blog.title}</h1>
               <div className="flex justify-between items-center text-sm text-gray-500">
                 <p>by {blog.author}</p>
-                <p>Published: {blog.publishDate}</p>
+                <p>Published: {formatDate(blog.publishDate)}</p>
               </div>
 
               {/* Blog Description */}
@@ -133,7 +142,7 @@ const Details = () => {
                   <div className="bg-white p-4 rounded-md transition-transform transform hover:scale-105">
                     <img
                       className="w-full h-32 object-cover rounded-md mb-4"
-                      src={`http://localhost:8000/api/v1/blog/blog-photo/${b._id}`}
+                      src={`${import.meta.env.VITE_BASE_URL}/api/v1/blog/blog-photo/${b._id}`}
                       alt={b.title}
                     />
                     <h3 className="text-lg font-bold mb-2">{b.title}</h3>
@@ -154,12 +163,12 @@ const Details = () => {
                     <div className="flex items-center mb-4 transition-transform transform hover:scale-105">
                       <img
                         className="w-20 h-20 object-cover rounded-md mr-4"
-                        src={`http://localhost:8000/api/v1/blog/blog-photo/${blog._id}`}
+                        src={`${import.meta.env.VITE_BASE_URL}/api/v1/blog/blog-photo/${blog._id}`}
                         alt={blog.title}
                       />
                       <div>
-                        <h3 className="text-lg font-semibold">{blog.title}</h3>
-                        <p className="text-xs text-gray-400 mt-1">{blog.publishDate}</p>
+                        <h3 className="text-lg font-semibold">{blog.title.substring(0,50) + "..."}</h3>
+                        <p className="text-xs text-gray-400 mt-1">{formatDate(blog.publishDate)}</p>
                       </div>
                     </div>
                   </Link>

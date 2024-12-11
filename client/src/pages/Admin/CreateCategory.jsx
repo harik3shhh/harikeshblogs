@@ -3,6 +3,9 @@ import axios from "axios";
 import { useAuth } from '../../context/auth';
 import { toast } from 'react-toastify';
 import { IoAdd } from "react-icons/io5";
+import { FaTrashAlt } from 'react-icons/fa';
+import { MdModeEdit } from "react-icons/md";
+
 
 
 const CreateCategory = () => {
@@ -15,7 +18,7 @@ const CreateCategory = () => {
   // GET ALL CATEGORIES
   const getAllCategory = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8000/api/v1/category/get-category");
+      const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/category/get-category`);
       if (data?.success) {
         setCategories(data?.category);
       }
@@ -37,7 +40,7 @@ const CreateCategory = () => {
           Authorization: `${auth.token}`
         }
       };
-      const { data } = await axios.delete(`http://localhost:8000/api/v1/category/delete-category/${id}`, config);
+      const { data } = await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/v1/category/delete-category/${id}`, config);
       if (data.success) {
         toast.success(`Category Deleted`);
         getAllCategory();
@@ -61,7 +64,7 @@ const CreateCategory = () => {
 
       if (selectedCategory) {
         // Update Category
-        const { data } = await axios.put(`http://localhost:8000/api/v1/category/update-category/${selectedCategory._id}`, { name: categoryName }, config);
+        const { data } = await axios.put(`${import.meta.env.VITE_BASE_URL}/api/v1/category/update-category/${selectedCategory._id}`, { name: categoryName }, config);
         if (data.success) {
           toast.success("Category Updated");
         } else {
@@ -69,7 +72,7 @@ const CreateCategory = () => {
         }
       } else {
         // Create Category
-        const { data } = await axios.post(`http://localhost:8000/api/v1/category/create-category`, { name: categoryName }, config);
+        const { data } = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/category/create-category`, { name: categoryName }, config);
         if (data.success) {
           toast.success("Category Created");
         } else {
@@ -107,10 +110,10 @@ const CreateCategory = () => {
         <div className="bg-white shadow-md rounded-lg w-full max-w-3xl p-6 relative">
           {/* Title and + Button in the same row */}
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold text-gray-700">Manage Categories</h1>
+            <h1 className="text-2xl font-bold font-crimsonpro text-gray-700">Manage Categories</h1>
             {/* Add Category Button in the top-right corner */}
             <button 
-              className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-3xl"
+              className="bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg p-2 rounded-3xl"
               onClick={openAddCategoryModal}>
               <IoAdd size={25}/> 
 
@@ -133,12 +136,13 @@ const CreateCategory = () => {
                     <button 
                       className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2"
                       onClick={() => openUpdateCategoryModal(c)}>
-                      Edit
+                      <MdModeEdit size={15}/>
+
                     </button>
                     <button 
                       className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
                       onClick={() => handleDelete(c._id)}>
-                      Delete
+                        <FaTrashAlt />
                     </button>
                   </td>
                 </tr>
