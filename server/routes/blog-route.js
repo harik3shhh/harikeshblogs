@@ -55,7 +55,7 @@ router.route("/banner-photo/:pid").get(bannerPhotoController);
 
 
 //! route for youtube
-router.route("/create-yt-vlog", requireSignIn, isAdmin, formidable()).post(createYoutubeVlogController);
+router.route("/create-yt-vlog", requireSignIn, formidable()).post(createYoutubeVlogController);
 router.route("/get-yt-vlog").get(getYoutubeVlogController);
 router.route("/vlog-photo/:pid").get(youtubePhotoController);
 

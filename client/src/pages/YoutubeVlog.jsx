@@ -81,8 +81,9 @@ const YoutubeVlog = () => {
             <div
               key={blog._id}
               className={`flex-none w-full flex-shrink-0 transition-transform duration-500 ease-in-out ${
-                blog._id === currentBlogIndex ? 'opacity-100' : 'opacity-50'
+                blog._id === currentBlogIndex ? '' : 'opacity-90'
               }`}
+              
               style={{
                 transform: `translateX(-${currentBlogIndex * 100}%)`,
               }}

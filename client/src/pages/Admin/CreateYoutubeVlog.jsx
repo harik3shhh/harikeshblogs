@@ -26,7 +26,7 @@ const CreateYoutubeVlog = () => {
     }
 
     try {
-      const { data } = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/youtube/create`, formData, {
+      const { data } = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/blog/create-yt-vlog`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
