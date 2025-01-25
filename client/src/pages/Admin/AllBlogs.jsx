@@ -157,10 +157,10 @@ const AllBlogs = () => {
                 </div>
 
                 {/* Views at the bottom right inside the card */}
-                <div className="absolute bottom-4 right-4 text-gray-600 flex items-center">
+                {/* <div className="absolute bottom-4 right-4 text-gray-600 flex items-center">
                   <FaEye size={20} />
                   <span className="ml-2">{b.views || 0} Views</span>
-                </div>
+                </div> */}
               </div>
             ))}
           </div>

@@ -108,7 +108,7 @@ const AdminDashboard = () => {
               <FaEnvelope className="text-4xl text-teal-500 mr-4" />
               <h2 className="text-2xl font-bold">Feedbacks</h2>
             </div>
-            
+            <p className="text-gray-400">It displays a form to submit feedback, along with a list of previously submitted feedback for transparency. This helps improve user engagement and service quality.</p>
             <NavLink to={"/get-feedback"}><button className="mt-4 bg-gradient-to-r from-teal-500 to-teal-700 text-white px-4 py-2 rounded-lg hover:from-teal-600 hover:to-teal-800 transition-all duration-300 shadow-lg">
               View All Feedbacks
             </button></NavLink>

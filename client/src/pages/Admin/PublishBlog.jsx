@@ -21,10 +21,10 @@ const PublishBlog = () => {
 
   const toolbarOptions = [
     [{ 'header': [1, 2, false] }], // Add heading options
-    ['bold', 'italic', 'underline'],
-    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-    ['link', 'image'],
-    ['clean']
+    ['bold', 'italic', 'underline'], // Text styles
+    [{ 'list': 'ordered' }, { 'list': 'bullet' }], // List options
+    ['link', 'image', 'video'], // Link, image, and video options
+    ['clean'], // Clear formatting
   ];
 
   const getAllCategory = async () => {
