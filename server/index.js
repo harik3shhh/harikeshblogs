@@ -25,7 +25,9 @@ app.use(formidable());
 app.use("/api/v1/blog", blogRoute);
 
 
-
+app.get("/", (req, res)=>{
+    res.send("home");
+});
 
 app.listen(PORT, ()=>{
     console.log(`Server is running on PORT ${PORT}`);
