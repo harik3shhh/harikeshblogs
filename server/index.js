@@ -11,7 +11,7 @@ const cors = require("cors");
 const PORT = process.env.PORT;
 
 const corsOptions = {
-    origin: "http://localhost:5173",
+    origin: "*",
     methods: "GET, POST, PUT, DELETE, HEAD",
     credentials: true,
 };
@@ -25,7 +25,9 @@ app.use(formidable());
 app.use("/api/v1/blog", blogRoute);
 
 
-
+app.get("/", (req, res)=>{
+    res.send("home");
+});
 
 app.listen(PORT, ()=>{
     console.log(`Server is running on PORT ${PORT}`);

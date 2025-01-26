@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-// const DB = "mongodb://127.0.0.1:27017/blog"
+// const DB = "mongodb+srv://harikeshlinux:xPHFDSUKBRt7Msa0@cluster0.me0vkr7.mongodb.net/blog"
 const DB = process.env.DB_PASS
 
 mongoose.connect(DB).then(()=>{
