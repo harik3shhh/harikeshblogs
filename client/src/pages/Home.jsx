@@ -5,7 +5,7 @@ import Stories from '../UI/Stories';
 import HomeBlogs from '../UI/HomeBlogs';
 import TechBlogSlide from '../UI/TechBlogSlide';
 import TravelBlogSlide from '../UI/TravelBlogSlide';
-import YoutubeVlog from './youtubeVlog';
+import YoutubeVlog from "../pages/YoutubeVlog"
 
 
 const Home = () => {
