@@ -14,7 +14,7 @@ const Weather = () => {
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        const API_WEATHER = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=18b13841a6bb6e092f2a5677e6aa18b0`;
+        const API_WEATHER = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=18b13841a6bb6e092f2a5677e6aa18b0`;
         const { data } = await axios.get(API_WEATHER);
         setCity(data.name);
         setTemperature((data.main.temp - 273.15).toFixed(2)); // Convert from Kelvin to Celsius
